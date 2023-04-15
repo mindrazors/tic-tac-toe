@@ -1,3 +1,4 @@
+require 'pry-byebug'
 # Build a tic-tac-toe game on the command line where two human players can play against each other
 # and the board is displayed in between turns.
 
@@ -21,11 +22,28 @@
     # user will see message declaring the winner
     # tic-tac-toe grid can be reset to start a new game
 
+empty_grid = Array.new(3) { Array.new(3) }
+draw_grid(empty_grid)
+
+class GameData
+    def initialize(player_one, player_two)
+        @player_one = player_one
+        @player_two = player_two
+        @grid_layout = Array.new(3) { Array.new(3) }
+    end
+    def grid_layout=(new_grid_layout)
+        @grid_layout = new_grid_layout
+    end
+
 def message_user(message)
     puts message
 end
 def get_input
-    gets.chomp
+    prompt_user
+    gets.chomp.to_i
+end
+def prompt
+    message_user("Enter a number from 0 through 9 to mark the corresponding square>>") 
 end
 
 message_user(get_input())
@@ -36,21 +54,14 @@ def draw_grid(grid_layout)
     puts grid_layout[6...9]
 end
 
-class Square
-    attr_accessor :position, :mark
-    def initialize(position, mark)
-        @position = position
-        @mark = mark
-    end
-    def position=(new_position)
-        @position = new_position
-    end
-end
+def interpret_grid()
 
-class GridInterpreter
-    def initialize(row_a =[], row_b =[], row_c =[])
-        @@row_a = row_a
-        @@row_b = row_b
-        @@row_c = row_c
+binding.pry
+
+class Mark
+    attr_accessor :position, :type
+    def initialize(position, type = '.')
+        @position = position
+        @symbol = symbol
     end
 end
