@@ -24,6 +24,9 @@
 def message_user(message)
     puts message
 end
+def get_input
+    gets.chomp
+end
 class Square
     def initialize(position='', mark='')
         @position = position
