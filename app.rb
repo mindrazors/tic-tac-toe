@@ -6,6 +6,8 @@
         # the squares of the grid
     # i.e. what objects will be interacted with in the same way?
         # the squares of the grid
+    # i.e. what objects will be using the same methods?
+        # rows, columns, and diagonals
 # What should be an instance variable/method?
     # i.e. what data should be shared between instances of similar objects?
 # What should the user be seeing?
@@ -19,15 +21,33 @@
     # user will see message declaring the winner
     # tic-tac-toe grid can be reset to start a new game
 
+class Row
+    # code
+end
+
+class Column
+    # code
+end
+
+class Diagonal
+    # code
+end
+
 class Square
-    def initialize(position)
-        @position = position
-        @mark = nil
-    end
-    def change_state(mark)
-        @mark = mark
+    def self.reset
+        # code
     end
 end
 
-a1 = Square.new(:a1)
 
+puts ' ___ ___ ___ '
+puts '|___|___|___|'
+puts '|___|___|___|'
+puts '|___|___|___|'
+puts ''
+
+puts 'a b c'
+puts 'd e f'
+puts 'g h i'
+puts 'Select a square and type its letter into the console:'
+user_selection = gets.chomp
