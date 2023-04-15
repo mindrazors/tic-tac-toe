@@ -27,8 +27,30 @@ end
 def get_input
     gets.chomp
 end
+
+message_user(get_input())
+
+def draw_grid(grid_layout)
+    puts grid_layout[0...3]
+    puts grid_layout[3...6]
+    puts grid_layout[6...9]
+end
+
 class Square
-    def initialize(position='', mark='')
+    attr_accessor :position, :mark
+    def initialize(position, mark)
         @position = position
         @mark = mark
     end
+    def position=(new_position)
+        @position = new_position
+    end
+end
+
+class GridInterpreter
+    def initialize(row_a =[], row_b =[], row_c =[])
+        @@row_a = row_a
+        @@row_b = row_b
+        @@row_c = row_c
+    end
+end
