@@ -21,33 +21,11 @@
     # user will see message declaring the winner
     # tic-tac-toe grid can be reset to start a new game
 
-class Row
-    # code
+def message_user(message)
+    puts message
 end
-
-class Column
-    # code
-end
-
-class Diagonal
-    # code
-end
-
 class Square
-    def self.reset
-        # code
+    def initialize(position='', mark='')
+        @position = position
+        @mark = mark
     end
-end
-
-
-puts ' ___ ___ ___ '
-puts '|___|___|___|'
-puts '|___|___|___|'
-puts '|___|___|___|'
-puts ''
-
-puts 'a b c'
-puts 'd e f'
-puts 'g h i'
-puts 'Select a square and type its letter into the console:'
-user_selection = gets.chomp
