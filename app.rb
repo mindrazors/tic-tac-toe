@@ -1,5 +1,10 @@
 class Game
     def initialize
+        if Player.player_count == 0
+            @@player_one = Player.new(1)
+        elsif Player.player_count == 1
+            @@player_two = Player.new(2)
+        end
         @@player_one = Player.new(1)
         @@player_two = Player.new(2)
         @board = Array.new(9)
@@ -19,7 +24,13 @@ class Game
         gets.chomp.to_sym
     end
 
-    def update_board
+    def update_board(selected_square)
+
+    end
+
+    def play
+        # code
+    end
 end
 
 class Square
@@ -63,6 +74,13 @@ class Square
             @column = :right
             @diagonal = :a1_c3
         end
+        if @column == :left
+            @position = "#{row}1".to_sym
+        elsif @column == :middle
+            @position = "#{row}2".to_sym
+        else
+            @column = "#{row}3".to_sym
+        end
         @@square_counter += 1
     end
 
@@ -72,7 +90,7 @@ class Square
 end
 
 class Players
-    attr_accessor :player_count
+    attr_accessor :name, :symbol
 
     @@player_count = 0
     def initialize(player_count)
