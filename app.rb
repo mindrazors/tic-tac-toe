@@ -1,5 +1,7 @@
 class Game
     def initialize
+        @@player_one = Player.new(1)
+        @@player_two = Player.new(2)
         @board = Array.new(9)
         @board.map! do |square|
             square = Square.new.symbol
@@ -11,6 +13,13 @@ class Game
         print "#{@board[(3..5)]}\n"
         print "#{@board[(6..8)]}\n"
     end
+
+    def get_player_input
+        puts "Select a square by combining the row (a-c) with a number (e.g. c1 or a3)"
+        gets.chomp.to_sym
+    end
+
+    def update_board
 end
 
 class Square
@@ -62,10 +71,17 @@ class Square
     end
 end
 
-def get_player_input
-    puts "Select a square by combining the row (a-c) with a number (e.g. c1 or a3)"
-    gets.chomp.to_sym
+class Players
+    attr_accessor :player_count
+
+    @@player_count = 0
+    def initialize(player_count)
+        @@player_count += 1
+        puts "Enter your name, player #{@@player_count}"
+        @name = gets.chomp.downcase.capitalize
+        @symbol = @@player_count < 1 ? :X : :O
+        puts "#{@name} will have the #{@symbol.to_s}'s"
+    end
 end
 
 game = Game.new
-game.show_board
