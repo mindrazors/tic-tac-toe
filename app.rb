@@ -1,10 +1,11 @@
 class Game
+    attr_accessor :players
+
     def initialize
         @@player_one = Players.new
         @@player_two = Players.new
-        @@players = [@@player_one, @@player_two]
-        
-        @current_player = @@players[0]
+        @players = [@@player_one, @@player_two]
+        @current_player = nil
         
         @board = Array.new(9)
         @board.map! do |square|
@@ -17,7 +18,7 @@ class Game
 
     def show_board
         @board.each do |square|
-            unless (square.index + 1) % 3 == 0
+            unless (square.index) % 3 == 0
                 print "#{square.symbol.to_s} "
             else
                 print "#{square.symbol.to_s}\n"
@@ -70,22 +71,29 @@ class Game
 
     def update_board(alphanumeric)
         selected_square = @board.find {|square| square.alphanumeric == alphanumeric}
-        selected_square.symbol = @current_player.symbol
+        selected_square.update(@current_player.symbol)
         @current_player.owned_squares.push(selected_square)
     end
 
+    def switch_current_player
+        @current_player = @current_player == @player_one ? @player_two : @player_one
+    end
+
     def play
+        @current_player = @player_one
         until @game_over
-            @current_player = @current_player == @players[1] ? @players[0] : players[1]
             show_board
             update_board(get_player_input)
+            check_for_victory
+            switch_current_player
         end
+        puts "Game over!"
         Game.new.play
     end
 end
 
 class Square
-    attr_accessor :index, :row, :symbol, :alphanumeric
+    attr_accessor :index, :row, :column, :diagonal, :symbol, :alphanumeric
 
     @@square_counter = 1
     def initialize
@@ -141,22 +149,25 @@ class Square
 end
 
 class Players
-    attr_accessor :name, :symbol
+    attr_accessor :name, :symbol, :owned_squares, :current_player
 
     @@player_count = 0
-    @owned_squares = []
     def initialize
         @@player_count += 1
         puts "Enter your name, player #{@@player_count}"
         @name = gets.chomp.downcase.capitalize
-        @symbol = @@player_count < 1 ? :X : :O
+        @symbol = @@player_count <= 1 ? :X : :O
         puts "#{@name} will have the #{@symbol.to_s}'s"
+        @owned_squares = []
     end
 
     def get_square(square_position)
         @owned_squares.push(square_position)
     end
 
-end
+    def self.get_current_player
+        @@current_player
+    end
 
-Game.new.play
+end
+game = Game.new
