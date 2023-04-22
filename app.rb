@@ -64,6 +64,8 @@ end
 
 def get_player_input
     puts "Select a square by combining the row (a-c) with a number (e.g. c1 or a3)"
+    gets.chomp.to_sym
+end
 
 game = Game.new
 game.show_board
