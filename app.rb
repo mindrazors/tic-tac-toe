@@ -1,67 +1,38 @@
-require 'pry-byebug'
-# Build a tic-tac-toe game on the command line where two human players can play against each other
-# and the board is displayed in between turns.
+class Square
+    attr_accessor :position, :row, :symbol
 
-# What should be a class?
-    # i.e. what objects should be similarly structured?
-        # the squares of the grid
-    # i.e. what objects will be interacted with in the same way?
-        # the squares of the grid
-    # i.e. what objects will be using the same methods?
-        # rows, columns, and diagonals
-# What should be an instance variable/method?
-    # i.e. what data should be shared between instances of similar objects?
-# What should the user be seeing?
-    # the board outline
-    # the X's and O's on the board
-    # an input prompt
-# What will using the program look like?
-    # user will see empty tic-tac-toe outline in console, created using line characters
-    # user will be prompted to choose which square to put either an x or an o
-    # user will continue to provide input until the game results in a draw, loss, or win
-    # user will see message declaring the winner
-    # tic-tac-toe grid can be reset to start a new game
-
-empty_grid = Array.new(3) { Array.new(3) }
-draw_grid(empty_grid)
-
-class GameData
-    def initialize(player_one, player_two)
-        @player_one = player_one
-        @player_two = player_two
-        @grid_layout = Array.new(3) { Array.new(3) }
-    end
-    def grid_layout=(new_grid_layout)
-        @grid_layout = new_grid_layout
+    @@square_counter = 1
+    def initialize
+        @position = @@square_counter
+        @@square_counter += 1
+        @symbol = "#{row}#{position}".to_sym
+        if @position.between?(1, 3)
+            @row = :a
+        elsif @position.between?(4, 6)
+            @row = :b
+        else
+            @row = :c
+        end
     end
 
-def message_user(message)
-    puts message
-end
-def get_input
-    prompt_user
-    gets.chomp.to_i
-end
-def prompt
-    message_user("Enter a number from 0 through 9 to mark the corresponding square>>") 
+    def update(player_symbol)
+        @symbol = player_symbol.to_sym
+    end
 end
 
-message_user(get_input())
+class Game
+    def initialize
+        @board = Array(9, Square.new)
+    end
 
-def draw_grid(grid_layout)
-    puts grid_layout[0...3]
-    puts grid_layout[3...6]
-    puts grid_layout[6...9]
-end
+    def show_board
+        print "#{@board[(0..2)]}\n"
+        print "#{@board[(3..5)]}\n"
+        print "#{@board[(6..8)]}\n"
+    end
 
-def interpret_grid()
-
-binding.pry
-
-class Mark
-    attr_accessor :position, :type
-    def initialize(position, type = '.')
-        @position = position
-        @symbol = symbol
+    def get_player_square
+        puts "Select a cell>>"
+        gets.chomp.to_sym
     end
 end
