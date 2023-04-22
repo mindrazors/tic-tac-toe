@@ -69,6 +69,12 @@ class Game
         end
     end
 
+    def check_for_draw
+        if @board.none? {|square| square.symbol == :%}
+            @game_over = true
+        end
+    end
+
     def check_for_victory
         check_rows
         check_columns
@@ -91,6 +97,7 @@ class Game
             show_board
             update_board(get_player_input)
             check_for_victory
+            check_for_draw
             switch_current_player
         end
         puts "Game over!"
