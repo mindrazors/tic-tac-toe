@@ -3,11 +3,15 @@ class Game
         @@player_one = Players.new
         @@player_two = Players.new
         @@players = [@@player_one, @@player_two]
+        
+        @current_player = @@players[0]
+        
         @board = Array.new(9)
         @board.map! do |square|
             square = Square.new
         end
         @game_over = false
+        @winner = nil
     end
 
 
@@ -26,17 +30,55 @@ class Game
         gets.chomp.to_sym
     end
 
-    def update_board(selected_alphanumeric)
-        square_index = @board.find_index {|square| square.alphanumeric == selected_alphanumeric}
-        @board[square_index].symbol = @current_player.symbol
+    def check_rows
+        if @current_player.owned_squares.count {|square| square.row == :a} == 3
+            @game_over = true
+        elsif @current_player.owned_squares.count {|square| square.row == :b} == 3
+            @game_over = true
+        elsif @current_player.owned_squares.count {|square| square.row == :c} == 3
+            @game_over = true
+        end
+    end
+
+    def check_columns
+        if @current_player.owned_squares.count {|square| square.column == :left} == 3
+            @game_over = true
+        elsif @current_player.owned_squares.count {|square| square.column == :middle} == 3
+            @game_over = true
+        elsif @current_player.owned_squares.count {|square| square.column == :right} == 3
+            @game_over = true
+        end
+    end
+
+    def check_diagonals
+        if @current_player.owned_squares.count {|square| square.diagonal == :a1_c3} == 2
+            if @current_player.owned_squares.count {|square| square.diagonal == :both} == 1
+                @game_over = true
+            end
+        elsif @current_player.owned_squares.count {|square| square.diagonal == :a3_c1} == 2
+            if @current_player.owned_squares.count {|square| square.diagonal == :both} == 1
+                @game_over = true
+            end
+        end
+    end
+
+    def check_for_victory
+        check_rows
+        check_columns
+        check_diagonals
+    end
+
+    def update_board(alphanumeric)
+        selected_square = @board.find {|square| square.alphanumeric == alphanumeric}
+        selected_square.symbol = @current_player.symbol
+        @current_player.owned_squares.push(selected_square)
     end
 
     def play
         until @game_over
-            @current_player = @@players[0]
+            @current_player = @current_player == @players[1] ? @players[0] : players[1]
             show_board
             update_board(get_player_input)
-            @current_player = @@players[1]
         end
         Game.new.play
     end
@@ -102,6 +144,7 @@ class Players
     attr_accessor :name, :symbol
 
     @@player_count = 0
+    @owned_squares = []
     def initialize
         @@player_count += 1
         puts "Enter your name, player #{@@player_count}"
@@ -109,6 +152,11 @@ class Players
         @symbol = @@player_count < 1 ? :X : :O
         puts "#{@name} will have the #{@symbol.to_s}'s"
     end
+
+    def get_square(square_position)
+        @owned_squares.push(square_position)
+    end
+
 end
 
 Game.new.play
