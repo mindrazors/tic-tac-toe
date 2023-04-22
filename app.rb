@@ -1,11 +1,17 @@
 class Game
     attr_accessor :players
 
+    @@played_before = nil
+
     def initialize
-        @@player_one = Players.new
-        @@player_two = Players.new
-        @players = [@@player_one, @@player_two]
+        unless @@played_before == true
+            @@player_one = Players.new
+            @@player_two = Players.new
+            @@players = [@@player_one, @@player_two]
+        end
         @current_player = nil
+
+        Square.square_counter = 1
         
         @board = Array.new(9)
         @board.map! do |square|
@@ -76,11 +82,11 @@ class Game
     end
 
     def switch_current_player
-        @current_player = @current_player == @player_one ? @player_two : @player_one
+        @current_player = @current_player == @@player_one ? @@player_two : @@player_one
     end
 
     def play
-        @current_player = @player_one
+        @current_player = @@player_one
         until @game_over
             show_board
             update_board(get_player_input)
@@ -88,6 +94,9 @@ class Game
             switch_current_player
         end
         puts "Game over!"
+        @@played_before = true
+        @@player_one.owned_squares = []
+        @@player_two.owned_squares = []
         Game.new.play
     end
 end
@@ -146,6 +155,10 @@ class Square
     def update(player_symbol)
         @symbol = player_symbol.to_sym
     end
+
+    def self.square_counter=(value)
+        @@square_counter = value
+    end
 end
 
 class Players
@@ -171,3 +184,4 @@ class Players
 
 end
 game = Game.new
+game.play
