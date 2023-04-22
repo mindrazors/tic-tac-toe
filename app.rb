@@ -5,15 +5,20 @@ class Game
         @@players = [@@player_one, @@player_two]
         @board = Array.new(9)
         @board.map! do |square|
-            square = Square.new.symbol
+            square = Square.new
         end
+        @game_over = false
     end
 
 
     def show_board
-        print "#{@board[(0..2)]}\n"
-        print "#{@board[(3..5)]}\n"
-        print "#{@board[(6..8)]}\n"
+        @board.each do |square|
+            unless (square.index + 1) % 3 == 0
+                print "#{square.symbol.to_s} "
+            else
+                print "#{square.symbol.to_s}\n"
+            end
+        end
     end
 
     def get_player_input
@@ -27,10 +32,13 @@ class Game
     end
 
     def play
-        @current_player = @@players[0]
-        show_board
-        update_board(get_player_input)
-        @current_player = @@players[1]
+        until @game_over
+            @current_player = @@players[0]
+            show_board
+            update_board(get_player_input)
+            @current_player = @@players[1]
+        end
+        Game.new.play
     end
 end
 
@@ -103,5 +111,4 @@ class Players
     end
 end
 
-game = Game.new
-game.play
+Game.new.play
